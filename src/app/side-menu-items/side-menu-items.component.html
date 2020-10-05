@@ -1,0 +1,6 @@
+<ul *ngFor="let menu of sideMenu"class="side-menu">
+    <li (click)="menuItemClick(menu, $event)"><a routerLink={{menu.url}} *ngIf="menu.submenu.length === 0" class="side-menu-item">{{menu.title}}</a><span class="side-menu-submenu" *ngIf="menu.submenu.length > 0">{{menu.title}}</span></li>
+    <div *ngIf="menu.submenu.length > 0" [hidden]="hidden">
+      <app-side-menu-items [sideMenu]="menu.submenu"></app-side-menu-items>
+    </div>
+</ul>

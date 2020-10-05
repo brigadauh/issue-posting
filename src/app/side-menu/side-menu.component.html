@@ -1,0 +1,8 @@
+<span class="sandwich-button" (click) = "sideMenuClick()">
+  <div class="sandwich-bttn-panel"></div>
+  <div class="sandwich-bttn-panel"></div>
+  <div class="sandwich-bttn-panel"></div>
+</span>
+<div class = "side-menu-wrap" [hidden]="hidden">
+  <app-side-menu-items (closeMenu)="closeMenuHandler($event)"></app-side-menu-items>
+</div>

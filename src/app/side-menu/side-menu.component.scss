@@ -1,0 +1,27 @@
+$sandwich-color: #aae7f5;
+$menu-background-color: #cedeec;
+.sandwich-button {
+  padding:2px 5px;
+  display:inline-block;
+  position:absolute;
+  left:10px;
+  top:11px;
+  cursor:pointer;
+}
+.sandwich-bttn-panel {
+  width: 25px;
+  height: 3px;
+  background-color: $sandwich-color;
+  margin: 5px 0;
+}
+.side-menu-wrap {
+  position: absolute;
+  top:60px;
+  left:0px;
+  width: 150px;
+  height: calc(100% - 60px);
+  background-color: $menu-background-color;
+  overflow-x: auto;
+  overflow-y: auto;
+  z-index: 1000;
+}

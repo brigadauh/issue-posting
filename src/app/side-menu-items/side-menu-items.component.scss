@@ -1,0 +1,19 @@
+$menu-color: #5a5a5a;
+.side-menu {
+  text-align:left;
+  width:auto;
+  list-style: none;
+  padding-inline-start: 20px;
+}
+.side-menu-submenu {
+  cursor:pointer;
+  color: $menu-color;
+}
+.side-menu-item {
+  text-decoration: none;
+  color: $menu-color;
+  font-weight: 600;
+}
+.side-menu-item:visited {
+  color: $menu-color;
+}

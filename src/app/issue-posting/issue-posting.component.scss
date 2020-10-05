@@ -1,0 +1,60 @@
+$header-background: #bed2e6;
+$header-text: #0f1023;
+$grid-border: solid 1px #8793b3;
+
+.posting-wrapper {
+  .add-posting {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 11px 10px 0;
+  }
+  .posting-filter {
+    .posting-filter-label {
+      margin-right: 10px;
+    }
+  }
+  .posting-content {
+     margin-bottom:15px;
+    .posting-header {
+      display: flex;
+      justify-content: space-between;
+      background-color: $header-background;
+      color: $header-text;
+      border: $grid-border;
+      padding: 5px 10px 7px 10px;
+      font-weight:600;
+    }
+    .posting-body {
+      padding: 5px 10px 7px 10px;
+      border: $grid-border;
+      border-top: none;
+      textarea {
+        width: calc(100% - 10px);
+      }
+    }
+    .posting-footer {
+      padding: 5px 10px 7px 10px;
+      border: $grid-border;
+      border-top: none;
+    }
+    .posting-tag {
+      padding-right: 10px;
+    }
+    .delete-icon, .edit-icon, .add-icon, .save-icon, .check-icon {
+      cursor: pointer;
+      margin-left:5px;
+    }
+    .delete-icon {
+      font-size: 16px;
+    }
+    .add-icon {
+
+    }
+    .check-icon {
+      color: #63d663;
+      border: solid 1px #ccc;
+      padding: 3px 3px 3px 3px;
+    }
+  }
+}
+
