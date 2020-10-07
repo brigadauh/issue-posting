@@ -61,6 +61,7 @@ export class IssuePostingComponent implements OnInit, OnDestroy {
     this.newPost = this.copyPosting(posting);
   }
   savePosting() {
+    this.newPost.text = this.expressionParser(this.newPost.text);
     this.issuePostingService.addPosting(this.newPost).subscribe(
       (ok: any) => {
         this.addNew = false;
@@ -114,6 +115,29 @@ export class IssuePostingComponent implements OnInit, OnDestroy {
     newPosting.tags = tags;
     return newPosting;
   }
+  private expressionParser(s) {
+    s = s.replace(/\s*([\+\-])/g,'$1');
+    s = s.replace(/([\+\-])\s*/g,'$1');
+    let t = s.replace(/[^0-9\+\-\.]/g, " ").replace(/\s\s+/g, ' ').trim();
 
+    const arr = t.split(' ');
+    for (let i = 0; i < arr.length; i++) {
+      const sum = this.calculateSum(arr[i]);
+      s = s.replace(arr[i], sum);
+    }
+    return s;
+  }
+  private calculateSum(s) {
+    var total = 0;
+    s = s.match(/[+\-]*(\.\d+|\d+(\.\d+)?)/g) || [];
+    // s = s.replace(/\s/g, '').match(/[+\-]?([0-9\.\s]+)/g) || [];
+    if (s.length === 1) {
+      return s;
+    }
+    while (s.length) {
+      total += parseFloat(s.shift());
+    }
+    return total + ' (calculated)';
+  }
 
 }
