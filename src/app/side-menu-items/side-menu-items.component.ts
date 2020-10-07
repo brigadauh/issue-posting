@@ -21,7 +21,7 @@ export class SideMenuItemsComponent implements OnInit {
     }
   }
   menuItemClick(menu,event) {
-    console.log('event', event);
+    // console.log('event', event);
     if (menu.submenu.length > 0) {
       this.hidden = !this.hidden;
     } else {

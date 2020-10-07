@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { IssuePostingService } from './issue-posting.service';
@@ -17,7 +17,8 @@ export class IssuePostingComponent implements OnInit, OnDestroy {
   public currentlyEditingIndex = -1;
   public tagFilter = '';
   private postingSubscription: Subscription;
-
+  @ViewChild('postingForm')
+  public postingForm;
   constructor(
     private issuePostingService: IssuePostingService
   ) { }
@@ -31,15 +32,16 @@ export class IssuePostingComponent implements OnInit, OnDestroy {
     this.postingSubscription = this.issuePostingService.getPostings().subscribe(
       (data: Posting[]) => {
         if (this.tagFilter) {
-          this.postings = data.filter(post => post.tags.indexOf(this.tagFilter) !== -1);
+          this.postings = data
+          .filter(post => post.tags && post.tags.length > 0 && post.tags.indexOf(this.tagFilter) !== -1);
         } else {
           this.postings = data;
         }
         this.postingTags = Array.from(this.issuePostingService.postingTags.keys());
-        console.log('data ----->', data, this.postingTags);
+        // console.log('data ----->', data, this.postingTags);
       },
       (err: any) => {
-        console.log('Error------->', err);
+        // console.log('Error------->', err);
       }
     );
   }
@@ -49,7 +51,7 @@ export class IssuePostingComponent implements OnInit, OnDestroy {
         this.getPosting();
       },
       (err: any) => {
-        console.log('Error------->', err);
+        // console.log('Error------->', err);
       }
      );
   }
@@ -61,18 +63,20 @@ export class IssuePostingComponent implements OnInit, OnDestroy {
     this.newPost = this.copyPosting(posting);
   }
   savePosting() {
-    this.newPost.text = this.expressionParser(this.newPost.text);
-    this.issuePostingService.addPosting(this.newPost).subscribe(
-      (ok: any) => {
-        this.addNew = false;
-        this.currentlyEditingIndex = -1;
-        this.newPost = new Posting();
-        this.getPosting();
-      },
-      (err: any) => {
-        console.log('Error------->', err);
-      }
-    );
+    if (this.postingForm.valid) {
+      this.newPost.text = this.expressionParser(this.newPost.text);
+      this.issuePostingService.addPosting(this.newPost).subscribe(
+        (ok: any) => {
+          this.addNew = false;
+          this.currentlyEditingIndex = -1;
+          this.newPost = new Posting();
+          this.getPosting();
+        },
+        (err: any) => {
+          // console.log('Error------->', err);
+        }
+      );
+    }
   }
   cancelPosting() {
     this.addNew = false;
@@ -85,7 +89,7 @@ export class IssuePostingComponent implements OnInit, OnDestroy {
       this.newPost.tags.push(this.newPostTag);
     }
     this.newPostTag = '';
-    console.log('newPostTag', this.newPost);
+    // console.log('newPostTag', this.newPost);
   }
   removeTag(tag) {
     const afterDeleteData = [];
@@ -115,27 +119,34 @@ export class IssuePostingComponent implements OnInit, OnDestroy {
     newPosting.tags = tags;
     return newPosting;
   }
-  private expressionParser(s) {
+  public expressionParser(s) {
+    if (!s) { return '';}
     s = s.replace(/\s*([\+\-])/g,'$1');
     s = s.replace(/([\+\-])\s*/g,'$1');
     let t = s.replace(/[^0-9\+\-\.]/g, " ").replace(/\s\s+/g, ' ').trim();
-
-    const arr = t.split(' ');
-    for (let i = 0; i < arr.length; i++) {
-      const sum = this.calculateSum(arr[i]);
-      s = s.replace(arr[i], sum);
-    }
-    return s;
-  }
-  private calculateSum(s) {
-    var total = 0;
-    s = s.match(/[+\-]*(\.\d+|\d+(\.\d+)?)/g) || [];
-    // s = s.replace(/\s/g, '').match(/[+\-]?([0-9\.\s]+)/g) || [];
-    if (s.length === 1) {
+    if (!t) {
       return s;
     }
-    while (s.length) {
-      total += parseFloat(s.shift());
+    const expressions = t.split(' ');
+    expressions.map(exp => {
+      const sum = this.calculateSum(exp);
+      s = s.replace(exp, sum);
+
+    });
+
+    return s;
+  }
+  public calculateSum(s: string) {
+    if (!s) {
+      return '';
+    }
+    var total = 0;
+    const arr = s.match(/[+\-]*(\.\d+|\d+(\.\d+)?)/g) || [];
+    if (arr.length === 1) {
+      return s;
+    }
+    while (arr.length) {
+      total += parseFloat(arr.shift());
     }
     return total + ' (calculated)';
   }

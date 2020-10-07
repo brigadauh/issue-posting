@@ -1,6 +1,7 @@
 $header-background: #bed2e6;
 $header-text: #0f1023;
 $grid-border: solid 1px #8793b3;
+$alert-danger: red;
 
 .posting-wrapper {
   .add-posting {
@@ -9,6 +10,7 @@ $grid-border: solid 1px #8793b3;
     margin: 0 11px 10px 0;
   }
   .posting-filter {
+    margin-bottom: 5px;
     .posting-filter-label {
       margin-right: 10px;
     }
@@ -55,6 +57,9 @@ $grid-border: solid 1px #8793b3;
       border: solid 1px #ccc;
       padding: 3px 3px 3px 3px;
     }
+  }
+  .alert.alert-danger {
+    color:$alert-danger;
   }
 }
 

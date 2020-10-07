@@ -12,7 +12,7 @@ export class SideMenuComponent implements OnInit {
   }
   sideMenuClick() {
     this.hidden = !this.hidden;
-    console.log('hidden', this.hidden);
+    // console.log('hidden', this.hidden);
   }
   closeMenuHandler(event?: any) {
     this.hidden = true;

@@ -12,20 +12,18 @@
       <i class="fa fa-plus add-icon" title="Submit new posting" (click)="addPosting()" [style.display]="currentlyEditingIndex > -1? 'none':''"></i>
     </div>
     <ng-template #editForm>
-      <form (ngSubmit)="savePosting()" #postingForm="ngForm">
-        <div class="posting-content">
-          <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
-            Title is required
-          </div>
+      <div class="posting-content">
+        <form (ngSubmit)="savePosting()" #postingForm="ngForm">
+
           <div class="posting-header">
-            <input type="text"  [(ngModel)]="newPost.title" name="title" #title="ngModel" required placeholder="Title" autocomplete="off">
+            <input type="text"  [(ngModel)]="newPost.title" name="title" #title="ngModel" required placeholder="Title*" autocomplete="off">
             <span>
               <i class="fa fa-times delete-icon" title="Cancel" (click)="cancelPosting()"></i>
-              <i class="fa fa-save save-icon" title="Save" (click)="savePosting()"></i>
+              <i class="fa fa-save save-icon" [title]="postingForm.valid ? 'Save' : 'Please fill out required fields'" (click)="savePosting()"></i>
             </span>
           </div>
           <div class="posting-body">
-            <textarea type="textarea" rows="5"  [(ngModel)]="newPost.text" name="text" #text="ngModel" required placeholder="Description"></textarea>
+            <textarea type="textarea" rows="5"  [(ngModel)]="newPost.text" name="text" #text="ngModel" required placeholder="Description*"></textarea>
           </div>
           <div class="posting-footer">
             <ng-container *ngFor="let tag of newPost.tags">
@@ -42,8 +40,15 @@
             </datalist>
             <i class="fa fa-check check-icon" title="Select" (click)="addTag()"></i>
           </div>
-        </div>
-      </form>
+
+          <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
+            Title is required
+          </div>
+          <div *ngIf="text.invalid && (text.dirty || text.touched)" class="alert alert-danger">
+            Description is required
+          </div>
+        </form>
+      </div>
     </ng-template>
 
     <ng-container *ngFor="let posting of postings; let i = index">
