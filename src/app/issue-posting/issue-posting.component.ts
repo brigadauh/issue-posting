@@ -119,18 +119,27 @@ export class IssuePostingComponent implements OnInit, OnDestroy {
     newPosting.tags = tags;
     return newPosting;
   }
+  /**
+  * Splits a string into an array of expressions.
+  * 1) Removes whitespace from left and right of + and -
+  * 2) Replaces all non digits except +,-, and "." with spaces.
+  * 3) Replace multi-spaces with single space
+  * e.g. if given " text 1 + 2 -3 another text 1+2" it will return "1+2-3 1+2"
+  * 4) Split into array and calculate sum of each
+  * 5) replace each expression with its sum
+  */
   public expressionParser(s) {
     if (!s) { return '';}
-    s = s.replace(/\s*([\+\-])/g,'$1');
-    s = s.replace(/([\+\-])\s*/g,'$1');
-    let t = s.replace(/[^0-9\+\-\.]/g, " ").replace(/\s\s+/g, ' ').trim();
+    s = s.replace(/\s*([\+\-])/g,'$1'); //removing left space near +,-
+    s = s.replace(/([\+\-])\s*/g,'$1'); // removing right space near +,-
+    let t = s.replace(/[^0-9\+\-\.]/g, " ").replace(/\s\s+/g, ' ').trim(); // removing all non-digits except "+","-","."
     if (!t) {
       return s;
     }
-    const expressions = t.split(' ');
+    const expressions = t.split(' '); //splitting space-separated expressions into array
     expressions.map(exp => {
-      const sum = this.calculateSum(exp);
-      s = s.replace(exp, sum);
+      const sum = this.calculateSum(exp); // calculating sum
+      s = s.replace(exp, sum); // replacing an expression with its sum
 
     });
 
@@ -141,12 +150,13 @@ export class IssuePostingComponent implements OnInit, OnDestroy {
       return '';
     }
     var total = 0;
+    //splitting an expression into an array of positive or negative numbers
     const arr = s.match(/[+\-]*(\.\d+|\d+(\.\d+)?)/g) || [];
     if (arr.length === 1) {
       return s;
     }
     while (arr.length) {
-      total += parseFloat(arr.shift());
+      total += parseFloat(arr.shift()); // adding numbers from the array
     }
     return total + ' (calculated)';
   }

@@ -20,9 +20,15 @@ describe('IssuePostingComponent', () => {
     fixture.detectChanges();
   });
 
+  // default "Out of the box" unit test
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // custom unit tests.
+  // I wrote some unit tests as an example, but for real project I would expand this to cover more functionality
+
   it('should calculate string expressions', () => {
     const exp1 = '1+2+3';
     const answer1 = '6 (calculated)';

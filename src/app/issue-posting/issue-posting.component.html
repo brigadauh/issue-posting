@@ -40,7 +40,7 @@
             </datalist>
             <i class="fa fa-check check-icon" title="Select" (click)="addTag()"></i>
           </div>
-
+          <!-- basic validation (included as an example). It should be expanded for real project-->
           <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
             Title is required
           </div>
